@@ -1,9 +1,11 @@
 package hello.service;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import hello.AuthHttpComponentsClientHttpRequestFactory;
 import hello.W3ConnRestController;
 import hello.model.RecommendInfor;
 
@@ -31,10 +33,15 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import com.rometools.rome.feed.atom.Entry;
+import com.rometools.rome.feed.atom.Feed;
+import com.rometools.rome.feed.synd.SyndPerson;
 
 @Service ("w3ConnService")
 public class W3ConnService {
@@ -179,5 +186,31 @@ public class W3ConnService {
         	
     	}
     	return retValue;
+	}
+	
+	public List<SyndPerson> listContributors(String username, String password, String url){
+//    	String url = "https://w3-connections.ibm.com/blogs/beba6c62-ff28-40bf-8b3c-b86f1520bfd7/api/recommend/entries/c66a7291-a529-4ec4-8d62-932b6699edd6";
+
+		HttpHost host = new HttpHost("w3-connections.ibm.com");
+		final AuthHttpComponentsClientHttpRequestFactory requestFactory =
+    		    new AuthHttpComponentsClientHttpRequestFactory(
+    		                 host, username, password);
+    	final RestTemplate restTemplate = new RestTemplate(requestFactory);
+    	
+    	Feed quote =  (Feed) restTemplate.getForObject(url, Feed.class);
+
+    	List<Entry> entities = quote.getEntries();
+    	
+    	ArrayList<SyndPerson> contributors = new ArrayList<SyndPerson>();
+//    	
+    	for (Object obj :entities){
+    		
+    		Entry entity = (Entry)obj;
+    		
+    		contributors.add(entity.getContributors().get(0));
+    		log.info(entity.getContributors().get(0).getEmail());
+    		log.info(entity.getTitle());
+    	}
+		return contributors;
 	}
 }
