@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>Getting Started: Serving Web Content</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<form action="#" th:action="@{/querystatus}" method="post" >
+	<fieldset>
+	<label for="intranetId">Intranet Id</label>
+	<input type="text" name="intranetId" />
+	<label for="password">Password</label>
+	<input type="password" name="password" />
+	<label for="email2verify">Email to verify</label>
+	<input type="text" name="email2verify" />
+	<input type="submit" value="Subscribe!"/>
+	</fieldset>
+	</form>
+</body>
+</html>
