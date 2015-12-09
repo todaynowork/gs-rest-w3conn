@@ -1,7 +1,10 @@
 package hello;
 
+import hello.model.RecommendInfor;
 import hello.service.W3ConnService;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +26,35 @@ public class WebController {
         return "greeting";
     }
     
+    @RequestMapping(value="/status", method=RequestMethod.GET)
+    public String viewstatusform(@RequestParam Map<String,String> allRequestParam, Model model) {
+       return "status";
+    }
+    
+    @RequestMapping(value="/status", method=RequestMethod.POST)
+    public String viewstatusSubmit(@RequestParam Map<String,String> allRequestParam, Model model) {
+    	String username = allRequestParam.get("intranetId");
+    	String password = allRequestParam.get("password");
+    	List<RecommendInfor> recommends = null;
+    	try {
+			recommends = w3srv.voteStatus(username, password);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	model.addAttribute("blogRecommends", recommends);
+    	return "status";
+    }
+    
     @RequestMapping(value="/querystatus", method=RequestMethod.GET)
     public String querystatusform(@RequestParam Map<String,String> allRequestParam, Model model) {
-       return "querystatus";
+       
+    	
+    	return "querystatus";
     }
     
     @RequestMapping(value="/querystatus", method=RequestMethod.POST)
