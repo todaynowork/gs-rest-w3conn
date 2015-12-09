@@ -4,6 +4,8 @@ import hello.model.RecommendInfor;
 import hello.service.W3ConnService;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -45,9 +47,13 @@ public class WebController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    	//create a comparator object using a Lambda expression
+    	Comparator<RecommendInfor> compareDouble = (d1, d2) ->new Integer(d1.getTotalResult()).compareTo( new Integer(d2.getTotalResult())); 
     	
+    	Collections.sort(recommends, Collections.reverseOrder( compareDouble));
     	model.addAttribute("blogRecommends", recommends);
     	return "status";
+    	
     }
     
     @RequestMapping(value="/querystatus", method=RequestMethod.GET)
