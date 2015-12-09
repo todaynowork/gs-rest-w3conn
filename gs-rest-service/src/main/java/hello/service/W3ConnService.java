@@ -151,7 +151,12 @@ public class W3ConnService {
         		recommendInfo.setId(id);
 
         		Node recommendUrl = (Node) linkList.item(i);
+        		
+        		
         		String rUrl = (String) recommendUrl.getAttributes().getNamedItem("href").getNodeValue();
+        		
+        		recommendInfo.setContributorsUrl(rUrl);
+        		
         		log.info(rUrl);
         		log.info(title);
         		response = client.execute(new HttpGet(rUrl), context);
