@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>Getting Started: Serving Web Content</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<form action="#" th:action="@{/status}" method="post" >
+	<fieldset>
+	<label for="intranetId">Intranet Id</label>
+	<input type="text" name="intranetId" />
+	<label for="password">Password</label>
+	<input type="password" name="password" />
+	<input type="submit" value="check vote status"/>
+	</fieldset>
+	</form>
+	
+	<h1>Entry list</h1>
+	<table>
+	<tr>
+	<th>NAME</th>
+	<th>Total likes</th>
+	<th>ID</th>
+	</tr>
+	<tr th:each="recomm : ${blogRecommends}">
+	<td th:text="${recomm.title}"></td>
+	<td th:text="${recomm.totalResult}"></td>
+	<td th:text="${recomm.id}"></td>
+	</tr>
+	</table>
+</body>
+</html>
