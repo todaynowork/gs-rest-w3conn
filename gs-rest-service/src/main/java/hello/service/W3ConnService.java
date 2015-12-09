@@ -145,6 +145,10 @@ public class W3ConnService {
         		String title = el.getElementsByTagName("title").item(0).getTextContent();
         		
         		recommendInfo.setTitle(title);
+        		
+        		String id = el.getElementsByTagName("id").item(0).getTextContent();
+        		
+        		recommendInfo.setId(id);
 
         		Node recommendUrl = (Node) linkList.item(i);
         		String rUrl = (String) recommendUrl.getAttributes().getNamedItem("href").getNodeValue();
