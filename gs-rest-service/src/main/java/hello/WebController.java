@@ -35,10 +35,10 @@ public class WebController {
         return "greeting";
     }
     
-    @RequestMapping(value="/listperson", method=RequestMethod.GET)
-    public String listPersonform(@RequestParam Map<String,String> allRequestParam, Model model) {
-       return "listperson";
-    }
+//    @RequestMapping(value="/listperson", method=RequestMethod.GET)
+//    public String listPersonform(@RequestParam Map<String,String> allRequestParam, Model model) {
+//       return "listperson";
+//    }
     
     @RequestMapping(value="/listperson/{entryId}")
     public String listPersonSubmit(HttpServletRequest request ,@PathVariable String entryId, @RequestParam Map<String,String> allRequestParam, Model model) {
