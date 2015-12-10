@@ -25,7 +25,8 @@
 	<tr th:each="recomm : ${blogRecommends}">
 	<td th:text="${recomm.title}"></td>
 	<td th:text="${recomm.totalResult}"></td>
-	<td th:text="${recomm.id}"></td>
+	<td><a href="#" th:href="'/listperson/' + ${recomm.id}">List person</a></td>
+	
 	</tr>
 	</table>
 </body>

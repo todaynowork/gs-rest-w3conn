@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,31 +40,39 @@ public class WebController {
        return "listperson";
     }
     
-    @RequestMapping(value="/listperson", method=RequestMethod.POST)
-    public String listPersonSubmit(@RequestParam Map<String,String> allRequestParam, Model model) {
-    	String username = allRequestParam.get("intranetId");
-    	String password = allRequestParam.get("password");
-    	List<SyndPerson> persons = null;
-    	try {
-    		String url = "https://w3-connections.ibm.com/blogs/beba6c62-ff28-40bf-8b3c-b86f1520bfd7/api/recommend/entries/c66a7291-a529-4ec4-8d62-932b6699edd6";
-    		persons = w3srv.listContributors(username, password, url);
-		} 
-    	catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    @RequestMapping(value="/listperson/{entryId}")
+    public String listPersonSubmit(HttpServletRequest request ,@PathVariable String entryId, @RequestParam Map<String,String> allRequestParam, Model model) {
+    	String[] credentials = GetUserBasicCredentials(request);
+    	
+    	if (credentials!=null){
+//        	String username = allRequestParam.get("intranetId");
+//        	String password = allRequestParam.get("password");
+    		
+    	   	String username = credentials[0];
+        	
+        	String password = credentials[1];
+        	List<SyndPerson> persons = null;
+        	try {
+        		String url = "https://w3-connections.ibm.com/blogs/beba6c62-ff28-40bf-8b3c-b86f1520bfd7/api/recommend/entries/" + entryId.replace("urn:lsid:ibm.com:blogs:entry-", "");
+        		persons = w3srv.listContributors(username, password, url);
+    		} 
+        	catch (Exception e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
 
-    	model.addAttribute("persons", persons);
+        	model.addAttribute("persons", persons);    		
+    	}
     	return "listperson";
     	
     }
     
-    @RequestMapping(value="/status", method=RequestMethod.GET)
-    public String viewstatusform(@RequestParam Map<String,String> allRequestParam, Model model) {
-       return "status";
-    }
+//    @RequestMapping(value="/status", method=RequestMethod.GET)
+//    public String viewstatusform(@RequestParam Map<String,String> allRequestParam, Model model) {
+//       return "status";
+//    }
     
-    @RequestMapping(value="/status", method=RequestMethod.POST)
+    @RequestMapping(value="/status")
     public String viewstatusSubmit(HttpServletRequest request ,@RequestParam Map<String,String> allRequestParam, Model model) {
     	
     	

@@ -155,7 +155,7 @@ public class W3ConnService {
         		
         		String id = el.getElementsByTagName("id").item(0).getTextContent();
         		
-        		recommendInfo.setId(id);
+        		recommendInfo.setId(id.replace("urn:lsid:ibm.com:blogs:entry-", ""));
 
         		Node recommendUrl = (Node) linkList.item(i);
         		
