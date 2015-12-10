@@ -4,10 +4,14 @@ import hello.model.RecommendInfor;
 import hello.service.W3ConnService;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -60,27 +64,54 @@ public class WebController {
     }
     
     @RequestMapping(value="/status", method=RequestMethod.POST)
-    public String viewstatusSubmit(@RequestParam Map<String,String> allRequestParam, Model model) {
-    	String username = allRequestParam.get("intranetId");
-    	String password = allRequestParam.get("password");
-    	List<RecommendInfor> recommends = null;
-    	try {
-			recommends = w3srv.voteStatus(username, password);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	//create a comparator object using a Lambda expression
-    	Comparator<RecommendInfor> compareDouble = (d1, d2) ->new Integer(d1.getTotalResult()).compareTo( new Integer(d2.getTotalResult())); 
+    public String viewstatusSubmit(HttpServletRequest request ,@RequestParam Map<String,String> allRequestParam, Model model) {
     	
-    	Collections.sort(recommends, Collections.reverseOrder( compareDouble));
-    	model.addAttribute("blogRecommends", recommends);
+    	
+    	String[] credentials = GetUserBasicCredentials(request);
+    	
+    	if (credentials!=null){
+//    	   	String username = allRequestParam.get("intranetId");
+//        	
+//        	String password = allRequestParam.get("password");
+        	
+    	   	String username = credentials[0];
+        	
+        	String password = credentials[1];
+        	
+        	List<RecommendInfor> recommends = null;
+        	try {
+    			recommends = w3srv.voteStatus(username, password);
+    		} catch (IOException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		} catch (Exception e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+        	//create a comparator object using a Lambda expression
+        	Comparator<RecommendInfor> compareDouble = (d1, d2) ->new Integer(d1.getTotalResult()).compareTo( new Integer(d2.getTotalResult())); 
+        	
+        	Collections.sort(recommends, Collections.reverseOrder( compareDouble));
+        	model.addAttribute("blogRecommends", recommends);
+    	}
+ 
     	return "status";
     	
     }
+
+	private String[] GetUserBasicCredentials(HttpServletRequest request) {
+		final String authorization = request.getHeader("Authorization");
+        if (authorization != null && authorization.startsWith("Basic")) {
+            // Authorization: Basic base64credentials
+            String base64Credentials = authorization.substring("Basic".length()).trim();
+            String credentials = new String(Base64.getDecoder().decode(base64Credentials),
+                    Charset.forName("UTF-8"));
+            // credentials = username:password
+            final String[] values = credentials.split(":",2);
+            return values;
+        }
+        return null;
+	}
     
     @RequestMapping(value="/querystatus", method=RequestMethod.GET)
     public String querystatusform(@RequestParam Map<String,String> allRequestParam, Model model) {
