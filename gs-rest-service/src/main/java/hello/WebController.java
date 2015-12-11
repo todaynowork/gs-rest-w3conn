@@ -29,11 +29,11 @@ public class WebController {
 	 @Autowired
 	 W3ConnService w3srv;
 
-    @RequestMapping("/greeting")
-    public String greeting(@RequestParam Map<String,String> allRequestParam, Model model) {
-        model.addAttribute("name", allRequestParam.get("intranetId"));
-        return "greeting";
-    }
+//    @RequestMapping("/greeting")
+//    public String greeting(@RequestParam Map<String,String> allRequestParam, Model model) {
+//        model.addAttribute("name", allRequestParam.get("intranetId"));
+//        return "greeting";
+//    }
     
 //    @RequestMapping(value="/listperson", method=RequestMethod.GET)
 //    public String listPersonform(@RequestParam Map<String,String> allRequestParam, Model model) {

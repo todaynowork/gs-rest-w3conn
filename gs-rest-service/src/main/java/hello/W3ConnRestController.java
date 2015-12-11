@@ -4,14 +4,17 @@ import hello.model.RecommendInfor;
 import hello.service.W3ConnService;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.http.HttpHost;
 import org.apache.http.client.ClientProtocolException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -27,6 +30,23 @@ public class W3ConnRestController {
 	 W3ConnService w3srv;
 	 
     private static final Logger log = LoggerFactory.getLogger(W3ConnRestController.class);
+    
+    private static final String template = "Hello, %s!";
+    private final AtomicLong counter = new AtomicLong();
+
+    
+    @CrossOrigin
+    @RequestMapping("/greeting")
+    public @ResponseBody Greeting greeting(@RequestParam(required=false, defaultValue="World") String name) {
+        System.out.println("==== in greeting ====");
+        return new Greeting(counter.incrementAndGet(), String.format(template, name));
+    }
+    
+    @RequestMapping("/greeting-javaconfig")
+    public @ResponseBody Greeting greetingWithJavaconfig(@RequestParam(required=false, defaultValue="World") String name) {
+        System.out.println("==== in greeting ====");
+        return new Greeting(counter.incrementAndGet(), String.format(template, name));
+    }
     
     @RequestMapping("/votes")
     public String votes(@RequestParam(value="username", defaultValue="") String username,@RequestParam(value="password", defaultValue="") String password,@RequestParam(value="name", defaultValue="") String name) throws ClientProtocolException, Exception {
