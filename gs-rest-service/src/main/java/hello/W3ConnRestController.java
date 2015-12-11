@@ -35,7 +35,7 @@ public class W3ConnRestController {
     private final AtomicLong counter = new AtomicLong();
 
     
-    @CrossOrigin
+    @CrossOrigin(origins = "http://localhost:8080")
     @RequestMapping("/greeting")
     public @ResponseBody Greeting greeting(@RequestParam(required=false, defaultValue="World") String name) {
         System.out.println("==== in greeting ====");
