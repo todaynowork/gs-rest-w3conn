@@ -151,5 +151,10 @@ public class WebController {
     	}
     	return "greeting";
     }
+    
+    @RequestMapping(value="/teststatus", method=RequestMethod.GET)
+    public String teststatusform(@RequestParam Map<String,String> allRequestParam, Model model) {
+    	return "teststatus";
+    }
 
 }
