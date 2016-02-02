@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>Getting Started: Serving Web Content</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <table>
+	<tr>
+	<th>NAME</th>
+	</tr>
+	<tr th:each="file : ${files}">
+	<td th:text="${file}"></td>
+	</tr>
+	</table>
+</body>
+</html>

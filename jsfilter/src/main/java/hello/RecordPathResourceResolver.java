@@ -6,19 +6,16 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.Resource;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.resource.PathResourceResolver;
 import org.springframework.web.servlet.resource.ResourceResolverChain;
 
-@Configuration
-@Import(Conf.class)
+@ComponentScan("hello")
 public class RecordPathResourceResolver extends PathResourceResolver {
 	
 	@Autowired
-	Recorder recorder;
+	private Recorder recorder;
 
 	@Override
 	protected boolean checkResource(Resource arg0, Resource arg1) throws IOException {
@@ -59,7 +56,7 @@ public class RecordPathResourceResolver extends PathResourceResolver {
 		System.out.println("getResource");
 //		System.out.println(rs.getURI().toString());
 //		System.out.println(resourcePath);
-		//recorder.record(resourcePath);
+		recorder.record(resourcePath);
 		return rs;
 	}
 

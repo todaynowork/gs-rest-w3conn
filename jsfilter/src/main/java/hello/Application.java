@@ -4,8 +4,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
+@ComponentScan("hello")
 public class Application extends SpringBootServletInitializer  {
 
     @Override
@@ -15,7 +18,9 @@ public class Application extends SpringBootServletInitializer  {
 
     
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+    	ApplicationContext ctx = SpringApplication.run(Application.class, args);
+//    	Recorder record = (Recorder)ctx.getBean("recorder");
+//    	record.record("test");
     }
 
 }
