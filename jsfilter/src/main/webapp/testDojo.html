@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+  <link rel="stylesheet" href="/dojo/dojo/../dijit/themes/claro/claro.css">
+  
+  <script>dojoConfig = {parseOnLoad: true}</script>
+  <script src='/dojo/dojo/dojo.js'></script>
+  
+  <script>
+dojo.require("dojo.io.script");
+
+ function searchGoogle(){
+   // Look up the node we'll stick the text under.
+   var targetNode = dojo.byId("results");
+
+   var url = "http://9.123.131.44:9083/e-business/esolution/webservices/mobileapi.jsp?APIID=CN_C_MYTRACKINGCALLLISTSERVICE&STARTROW=1&VIEWID=incListView&t=1459409435748&MAXUID=cn_requester1&MAXPWD=1111!!!!&_1=mtss_cn_4cli&_2=1.0.0_160324";
+   // The parameters to pass to xhrGet, the url, how to handle it, and the callbacks.
+   var jsonpArgs = {
+     //url: "http://ajax.googleapis.com/ajax/services/search/web",
+     url: url,
+     callbackParamName: "callback",
+     content: {
+       v: "1.0",
+       q: "dojo toolkit"
+     },
+     load: function(data){
+       // Set the data from the search into the viewbox in nicely formatted JSON
+       targetNode.innerHTML = "<pre>" + dojo.toJson(data, true) + "</pre>";
+     },
+     error: function(error){
+       targetNode.innerHTML = "An unexpected error occurred: " + error;
+     }
+   };
+   dojo.io.script.get(jsonpArgs);
+ }
+ dojo.ready(searchGoogle);
+  </script>
+</head>
+<body class="claro">
+    <b>Google Search Results for 'dojo toolkit' (In JSON):</b>
+<div id="results" style="height: 200px;"></div>
+</body>
+</html>
