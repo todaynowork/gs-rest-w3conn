@@ -15,4 +15,16 @@ public class Utils {
 		} ;
 		return my_string;
 	}
+	
+    //return the current jar file location
+    public static String getJarLocation(Class caller) {
+        String jarFileLoc ;
+        jarFileLoc = caller.getProtectionDomain().getCodeSource().getLocation().getPath();
+
+        jarFileLoc = jarFileLoc.substring(0, jarFileLoc.lastIndexOf("/"));
+
+        jarFileLoc = jarFileLoc.replaceAll("%20", " ");
+
+        return jarFileLoc;
+    }
 }

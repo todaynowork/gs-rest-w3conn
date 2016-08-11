@@ -142,10 +142,10 @@ public class HttpClientUtil {
             httpGet.setConfig(requestConfig);  
         }  
         try {  
-            System.out.println("Executing request " + httpGet.getRequestLine());  
+        	logger.info("Executing request " + httpGet.getRequestLine());  
             //请求数据  
             CloseableHttpResponse response = httpClient.execute(httpGet);  
-            System.out.println(response.getStatusLine());  
+            logger.info(response.getStatusLine().toString());  
             int status = response.getStatusLine().getStatusCode();  
             if (status == HttpStatus.SC_OK) {  
                 HttpEntity entity = response.getEntity();  
@@ -154,7 +154,7 @@ public class HttpClientUtil {
                 responseBody = EntityUtils.toString(entity);  
                 //EntityUtils.consume(entity);  
             } else {  
-                System.out.println("http return status error:" + status);  
+            	logger.info("http return status error:" + status);  
                 throw new ClientProtocolException("Unexpected response status: " + status);  
             }  
         } catch (Exception ex) {  
@@ -237,7 +237,7 @@ public class HttpClientUtil {
         //请求数据  
         CloseableHttpResponse response = httpClient.execute(targetHost,httpPost,context);  
         try {  
-            System.out.println(response.getStatusLine());  
+        	logger.info(response.getStatusLine().toString());  
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {  
                 HttpEntity entity = response.getEntity();  
                 // do something useful with the response body  
@@ -245,7 +245,7 @@ public class HttpClientUtil {
                 responseBody = EntityUtils.toString(entity);  
                 //EntityUtils.consume(entity);  
             } else {  
-                System.out.println("http return status error:" + response.getStatusLine().getStatusCode());  
+            	logger.info("http return status error:" + response.getStatusLine().getStatusCode());  
             }  
         } catch (Exception e) {  
             e.printStackTrace();  
