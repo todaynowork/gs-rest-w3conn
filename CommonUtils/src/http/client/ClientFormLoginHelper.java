@@ -3,20 +3,16 @@ package http.client;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.cookie.Cookie;
-import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -26,23 +22,10 @@ import org.slf4j.LoggerFactory;
 
 
 public class ClientFormLoginHelper {
+	
+	private static HashMap<String, HashMap<String, String>> users = new HashMap<String, HashMap<String, String>>();
 	private static final Logger logger = LoggerFactory.getLogger(ClientFormLogin.class); 
 	
-	
-	static void buy(String jsonData, CloseableHttpClient httpclient) throws ClientProtocolException, IOException {
-		JSONObject data = new JSONObject(jsonData);
-		
-		JSONArray sales = data.getJSONArray("datas");
-		
-		for (int i=0;i< sales.length();i++ ){
-			JSONObject obj  = sales.getJSONObject(i);
-			logger.debug(obj.toString());
-			
-            String saleId = obj.getString("sale_id");
-            executeSale(httpclient, saleId);
-
-		}
-	}
 
 	private static void executeSale(CloseableHttpClient httpclient, String saleId)
 			throws ClientProtocolException, IOException {
@@ -66,38 +49,52 @@ public class ClientFormLoginHelper {
             response1.close();
         }
 	}
-	static void logon(BasicCookieStore cookieStore, CloseableHttpClient httpclient)
+	static void logon(CloseableHttpClient httpclient,String... credentials)
 			throws URISyntaxException, IOException, ClientProtocolException {
+		
+		String userName = credentials.length >0 ? credentials[0] : null;
+		String password = credentials.length >1 ? credentials[1] : null;
+		String level = credentials.length >2 ? credentials[2] : null;
+//		HashMap user = users.get(userName);
+		HttpUriRequest login = createLogonReq(userName, password, level);
+		executeRequest(httpclient,login);
+//		CloseableHttpResponse response2 = httpclient.execute(login);
+//		try {
+//		    HttpEntity entity = response2.getEntity();
+//
+//		    logger.debug("Login form get: " + response2.getStatusLine());
+//		    logger.debug("Login form get: " + EntityUtils.toString(response2.getEntity()));
+//		    EntityUtils.consume(entity);
+
+//		    logger.debug("Post logon cookies:");
+//		    List<Cookie> cookies = cookieStore.getCookies();
+//		    if (cookies.isEmpty()) {
+//		        System.out.println("None");
+//		    } else {
+//		        for (int i = 0; i < cookies.size(); i++) {
+//		        	logger.debug("- " + cookies.get(i).toString());
+//		        }
+//		    }
+//		} finally {
+//		    response2.close();
+//		}
+	}
+
+	static HttpUriRequest createLogonReq(String userName, String password, String level)
+			throws URISyntaxException {
 		HttpUriRequest login = RequestBuilder.post()
 		        .setUri(new URI("http://180.131.58.137/wx_login.do"))
-		        .addParameter("person.login_area", "3")
+		        .addParameter("person.login_area", level)
 //		        .addParameter("person.login_acount", "17080671147")
 //		        .addParameter("person.password", "wang1211")
 //		        .addParameter("person.login_acount", "15940926867")
 //		        .addParameter("person.password", "15940926867")
-		        .addParameter("person.login_acount", "15998530111")
-		        .addParameter("person.password", "221328")
+//		        .addParameter("person.login_acount", "15998530111")
+//		        .addParameter("person.password", "221328")
+		        .addParameter("person.login_acount", userName)
+		        .addParameter("person.password", password)
 		        .build();
-		CloseableHttpResponse response2 = httpclient.execute(login);
-		try {
-		    HttpEntity entity = response2.getEntity();
-
-		    logger.debug("Login form get: " + response2.getStatusLine());
-		    logger.debug("Login form get: " + EntityUtils.toString(response2.getEntity()));
-		    EntityUtils.consume(entity);
-
-		    logger.debug("Post logon cookies:");
-		    List<Cookie> cookies = cookieStore.getCookies();
-		    if (cookies.isEmpty()) {
-		        System.out.println("None");
-		    } else {
-		        for (int i = 0; i < cookies.size(); i++) {
-		        	logger.debug("- " + cookies.get(i).toString());
-		        }
-		    }
-		} finally {
-		    response2.close();
-		}
+		return login;
 	}
 	
 //	static boolean verify(String responseText){
@@ -124,10 +121,7 @@ public class ClientFormLoginHelper {
 
 		if (HTML != null && HTML.length() > 0) {
 			Document doc = Jsoup.parse(HTML);
-			System.out
-					.println("Title: " + doc.getElementsByTag("title").text());
-			System.out.println("H1: " + doc.getElementsByTag("h1").text());
-			Element table = null;
+//			Element table = null;
 			Element ul = null;
 
 			if (doc != null) {
