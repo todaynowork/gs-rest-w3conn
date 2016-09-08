@@ -58,26 +58,7 @@ public class ClientFormLoginHelper {
 //		HashMap user = users.get(userName);
 		HttpUriRequest login = createLogonReq(userName, password, level);
 		executeRequest(httpclient,login);
-//		CloseableHttpResponse response2 = httpclient.execute(login);
-//		try {
-//		    HttpEntity entity = response2.getEntity();
-//
-//		    logger.debug("Login form get: " + response2.getStatusLine());
-//		    logger.debug("Login form get: " + EntityUtils.toString(response2.getEntity()));
-//		    EntityUtils.consume(entity);
 
-//		    logger.debug("Post logon cookies:");
-//		    List<Cookie> cookies = cookieStore.getCookies();
-//		    if (cookies.isEmpty()) {
-//		        System.out.println("None");
-//		    } else {
-//		        for (int i = 0; i < cookies.size(); i++) {
-//		        	logger.debug("- " + cookies.get(i).toString());
-//		        }
-//		    }
-//		} finally {
-//		    response2.close();
-//		}
 	}
 
 	static HttpUriRequest createLogonReq(String userName, String password, String level)
@@ -85,12 +66,6 @@ public class ClientFormLoginHelper {
 		HttpUriRequest login = RequestBuilder.post()
 		        .setUri(new URI("http://180.131.58.137/wx_login.do"))
 		        .addParameter("person.login_area", level)
-//		        .addParameter("person.login_acount", "17080671147")
-//		        .addParameter("person.password", "wang1211")
-//		        .addParameter("person.login_acount", "15940926867")
-//		        .addParameter("person.password", "15940926867")
-//		        .addParameter("person.login_acount", "15998530111")
-//		        .addParameter("person.password", "221328")
 		        .addParameter("person.login_acount", userName)
 		        .addParameter("person.password", password)
 		        .build();
